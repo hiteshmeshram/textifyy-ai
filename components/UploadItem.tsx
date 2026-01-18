@@ -3,6 +3,8 @@ import {useDropzone} from 'react-dropzone'
 
 import { generatepreSignedURL } from "@/lib/generatepresignedurl";
 import { useCallback } from 'react';
+import { storeUrlToDb } from '@/lib/storeUrlToDb';
+import { ragpipeline } from '@/lib/ragpipeline';
 
 export const UploadItem = () => {
 
@@ -11,23 +13,36 @@ export const UploadItem = () => {
 
         //generate presigned url
         const presignedurl = await generatepreSignedURL(file);
+        console.log(presignedurl, "url is ")
 
+        if (!presignedurl) return;
         //upload to r3
-        const res = await fetch(presignedurl, {
-            method: "PUT",
-            body: file
-        })
+        try {  
+            const res = await fetch(presignedurl,{
+                method: "PUT",
+                body: file,
+            })
 
-
-        //todo: store the url in db
-
-
-        // logic for RAG
-        if (res.ok) {
-            alert("uploaded successfully")
-        } else {
-            alert('failed uploading')
+            const data = await res.json();
+            console.log(data);
+        } catch(e) {
+            console.log(e);
+            console.error(e);
         }
+
+        // const data = await res.json();
+        // console.log(data);
+        // //todo: store the url in db
+        // await storeUrlToDb();
+
+        // await ragpipeline();
+
+        // // logic for RAG
+        // if (res.ok) {
+        //     alert("uploaded successfully")
+        // } else {
+        //     alert('failed uploading')
+        // }
         // Do something with the files
       }, [])
 

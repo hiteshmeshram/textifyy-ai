@@ -13,33 +13,33 @@ datasource db {
   provider = "postgresql"
 }
 
+
 model User {
-  id   Int  @id @default(autoincrement())
-  name  String
-  email  String @unique
-  documents  Documents[]
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String?
+  // document Document[]
 }
 
-model Documents {
-  id   Int @id @default(autoincrement())
-  name String
-  url   String
-  userId   Int
-  user    User @relation(fields: [userId], references: [id])
-  messages Messages[]
-}
-
-model Messages {
-  id  Int @id  @default(autoincrement())
+model Document {
+  id      Int       @id @default(autoincrement())
+  name    String
+  url     String
   userId  Int
-  documentId  Int
-  role   MessageRole
-  content String
-  documents Documents @relation(fields: [documentId], references: [id])
+  // user   User   @relation(fields: [userId], references: [id])
+  message Message[]
 }
 
 enum MessageRole {
-  User
   system
-  Assistent
+  user
+}
+
+model Message {
+  id         Int         @id @default(autoincrement())
+  role       MessageRole
+  documentId Int  
+  content    String
+  document   Document    @relation(fields: [documentId], references: [id])
 }
