@@ -37,31 +37,33 @@ export const ChatComponent = () => {
     }
 
     async function handleSubmit() {
-        console.log('inside handlesubmit')
         try{
-            // // const context = await ragRetrival(userMessage);
-            // // const response = await sendToLLM(context, userMessage)
-            // console.log(context, "inside context")
-            // console.log("response", response)
-            setMessages((prev)=> [...prev, {"role": "user", "content": userMessage}])
+            const res = await ragRetrival(userMessage);
+            const context = JSON.parse(res);
+            const response = await sendToLLM(context, userMessage)
+            const llmResponse = JSON.parse(response)
+            setMessages((prev)=> [...prev, {"role": "user", "content": userMessage}, {"role": "system", "content": llmResponse.content}])
+            setUserMessage("")
         } catch(e) {
             console.error(e);
+        } finally {
+            setUserMessage("");
         }
         // setMessages((prev) => [...prev,{"role": "user", "content": e.target.value}, {"role": "assistant", content: response}])
         // console.log(response);
         
     }
 
-    async function main() {
-        await getAllUserMessages();
-    }
-    useEffect(() => {
-        main()
-    }, [userMessage])
+    // async function main() {
+    //     await getAllUserMessages();
+    // }
+    // useEffect(() => {
+    //     main()
+    // }, [userMessage])
     return <div className="w-full">
             <div className="flex min-h-screen mx-auto w-3/4 border border-neutral-200 relative">
                 <div className=" mt-10 flex flex-col gap-5 p-20">
-                    {messages?.map((m) => <div>
+                    {messages?.map((m, index) => <div key={index}>
                         {m.role === 'user' && <div className="flex justify-end gap-4 ">
                             <div className="w-fit text-white  bg-blue-500 px-5 py-2 rounded-l-3xl rounded-tr-3xl">
                                 <p>{m.content}</p>
@@ -74,9 +76,9 @@ export const ChatComponent = () => {
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="#000000"
-                                    stroke-width="1"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeWidth="1"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                     >
                                     <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
                                     <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
@@ -95,9 +97,9 @@ export const ChatComponent = () => {
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="#000000"
-                                    stroke-width="1"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeWidth="1"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                     >
                                     <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
                                     <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
