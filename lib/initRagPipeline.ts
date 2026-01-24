@@ -10,13 +10,22 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PineconeStore } from "@langchain/pinecone";
 import { Pinecone as PineconeClient } from "@pinecone-database/pinecone";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./options";
+import { prisma } from "./db";
 
 
+async function getUser() {
+    const session = await getServerSession(authOptions);
+    const user = await prisma.user.findUnique({
+        where: {
+            email: session?.user?.email!
+        }
+    })
+    return user;
+}
 export async function intiRagPipeline(filename: string): Promise<void> {
- 
-    // const embeddings = new OpenAIEmbeddings({
-    // model: "text-embedding-3-small"
-    // });
+    const user = await getUser()
     const embeddings = new PineconeEmbeddings({
         model: "multilingual-e5-large",
       });
@@ -32,19 +41,25 @@ export async function intiRagPipeline(filename: string): Promise<void> {
         const docs = await loader.load();
     
         const splitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000, chunkOverlap: 200 })
-        const texts = await splitter.splitDocuments(docs)
-    
-        
+        const texts = await splitter.splitDocuments(docs);
+
+        const textsWithMetadata = texts.map(text => ({
+            ...text,
+            metadata: {...text.metadata, fileName: filename, userId: user?.id.toString()}
+        }) )
+        console.log(textsWithMetadata)
+
         const pinecone = new PineconeClient({
             apiKey: process.env.PINECONE_API_KEY!
         });
 
         const index = pinecone.index(process.env.PINECONE_INDEX!)
 
-        const vectorStore = await PineconeStore.fromDocuments(texts, embeddings, {
-            pineconeIndex: index
+        const vectorStore = await PineconeStore.fromDocuments(textsWithMetadata, embeddings, {
+            pineconeIndex: index,
+            namespace: user?.email
+            
         })
-        console.log('vector stored')
 
     } catch(e) {
         console.error(e);

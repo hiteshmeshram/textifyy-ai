@@ -12,6 +12,10 @@ export const authOptions: AuthOptions = {
       ],
       secret: process.env.NEXTAUTH_SECRET,
       callbacks: {
+        async jwt({token, user}) {
+           
+          return token
+        },
         async signIn({user}) {
           const existinguser = await prisma.user.findUnique({
             where: {

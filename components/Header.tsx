@@ -12,8 +12,6 @@ export const Header = () => {
         // router.push('/dashboard');
     }
     return <div className="flex justify-end gap-3 ">
-        {JSON.stringify(session)}
-        <button  className="border border-neutral-400 shadow-xl px-5 py-1 rounded-md">Textify pro</button>
-        <button onClick={handleClick} className="border bg-black text-white px-5 py-1 rounded-md">signin</button>
+        <button onClick={handleClick} className="bg-black text-white px-5 py-2 rounded-3xl shadow-sm">signin</button>
     </div>
 }

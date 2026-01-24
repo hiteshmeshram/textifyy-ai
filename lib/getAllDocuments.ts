@@ -6,7 +6,7 @@ import { authOptions } from "./options";
 
 export async function getAllDocuments() {
     const session = await getServerSession(authOptions);
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
         where: {
             email: session?.user?.email!
         }
