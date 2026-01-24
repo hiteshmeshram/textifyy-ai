@@ -18,8 +18,6 @@ async function getUser() {
 
 export async function ragRetrival(query: string, fileName: string) {
     const user = await getUser()
-    console.log('inside ragretrival');
-    console.log(user?.email, fileName, query)
     const embeddings = new PineconeEmbeddings({
         model: "multilingual-e5-large",
       });
@@ -43,7 +41,6 @@ export async function ragRetrival(query: string, fileName: string) {
           
         });
         if (!result) return "";
-        console.log("inside ragRetrival");
         return JSON.stringify(result);
 
       } catch(e) {

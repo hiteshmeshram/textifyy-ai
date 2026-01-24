@@ -2,7 +2,7 @@
 
 import { getAllDocuments } from "@/lib/getAllDocuments"
 import { signOut } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export interface Document {
@@ -27,8 +27,9 @@ useEffect(() => {
 
 
 const handleSignout = () => {
-    signOut({redirect: false});
-    router.push("/");
+    signOut({redirect: false}).then(() => {
+        router.push("/");
+    });
 }
     return <div className={`${isOpen ? "w-96" : "w-30" }  flex flex-col border border-r border-neutral-200 h-screen relative`}>
         <div className="flex justify-between gap-4 p-5 px-8">
@@ -50,8 +51,8 @@ const handleSignout = () => {
         </div>
         <div className=" w-full  absolute p-5 left-0 bottom-15">
             <div className="flex flex-col gap-5">
-                <button className="bg-black text-white w-full  py-2 rounded-xl">upgrade</button>
-                <button onClick={handleSignout} className="bg-black text-white w-full  py-2 rounded-xl">signout</button>
+                <button onClick={()=>alert('In pipeline')} className="bg-black text-white w-full  py-2 rounded-xl hover:bg-neutral-700 hover:text-neutral-300">upgrade</button>
+                <button onClick={handleSignout} className="bg-black text-white w-full  py-2 rounded-xl hover:bg-neutral-700 hover:text-neutral-300">signout</button>
             </div>
         </div>
     </div>

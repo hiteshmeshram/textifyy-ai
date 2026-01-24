@@ -7,11 +7,9 @@ export const Header = () => {
     const router = useRouter();
 
     const handleClick = () => {
-        console.log('inside handleclick');
         signIn();
-        // router.push('/dashboard');
     }
-    return <div className="flex justify-end gap-3 ">
+    return <div className="hidden  md:flex justify-end gap-3 ">
         <button onClick={handleClick} className="bg-black text-white px-5 py-2 rounded-3xl shadow-sm">signin</button>
     </div>
 }

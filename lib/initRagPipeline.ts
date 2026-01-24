@@ -47,7 +47,6 @@ export async function intiRagPipeline(filename: string): Promise<void> {
             ...text,
             metadata: {...text.metadata, fileName: filename, userId: user?.id.toString()}
         }) )
-        console.log(textsWithMetadata)
 
         const pinecone = new PineconeClient({
             apiKey: process.env.PINECONE_API_KEY!

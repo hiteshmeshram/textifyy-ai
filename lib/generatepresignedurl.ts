@@ -23,6 +23,5 @@ export async function generatepreSignedURL(file: File): Promise<string> {
         { expiresIn: 3600 },
       );
 
-      console.log(putUrl)
       return putUrl;
 }

@@ -4,7 +4,7 @@ import { ragRetrival } from "@/lib/ragRetrival";
 import { sendToLLM } from "@/lib/sendToLLM";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 
 interface Message {
     role: string;
@@ -42,13 +42,14 @@ export const ChatComponent = () => {
         if (!name) return;
         setFileName(name)
     }
+
     useEffect(() => {
         main()
     }, [userMessage])
-    return <div className="w-full">
-            <div className="flex h-screen mx-auto w-3/4 border border-neutral-200 relative">
-                <div className=" mt-10 w-full min-h-[80%] overflow-y-scroll  flex flex-col gap-5 p-20 ">
-                    {messages?.map((m, index) => <div key={index} className="">
+    return <div className="w-full border border-neutral-200">
+            <div className="flex flex-col  h-3/4 w-full mx-auto   relative">
+                <div className=" mt-10 flex-1 w-full min-h-[80%] overflow-y-scroll  flex flex-col gap-5 p-20 ">
+                    {messages?.map((m, index) => <div key={index} className="w-full ">
                         {m.role === 'user' && <div className="flex justify-end gap-4 ">
                             <div className="w-fit text-white  bg-blue-500 px-5 py-2 rounded-l-3xl rounded-tr-3xl">
                                 <p>{m.content}</p>
@@ -97,7 +98,7 @@ export const ChatComponent = () => {
                          </div>}
                     </div>)}
                 </div>
-                <div className="absolute left-0 bottom-20 w-full flex gap-2 px-5">
+                <div className="sticky left-0 bottom-10  w-3/4 mx-auto flex gap-2 px-5">
                     <span>
                         <div className="rounded-full w-10 h-10 bg-white border border-neutral-100"></div>
                     </span>

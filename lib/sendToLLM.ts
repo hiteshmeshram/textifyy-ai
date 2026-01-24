@@ -8,9 +8,7 @@ interface Context {
 
 export async function sendToLLM(context: Context[], query: string) {
     const contextForLLM = context.map((context) => context.pageContent)
-    console.log('contextfor llm')
-    console.log(contextForLLM)
-    // console.log(context, query, 'inside llm to respond')
+    
     const client = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY!
     });
