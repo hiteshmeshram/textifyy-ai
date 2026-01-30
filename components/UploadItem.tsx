@@ -45,7 +45,8 @@ export const UploadItem = () => {
 
       const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-    return <div className='flex-1 items-center justify-center flex w-full  mb-10 '>
+    return <div className='flex-1 items-center justify-center flex flex-col w-full  mb-10 '>
+        <h1 className='text-2xl font-medium tracking-tight '>PDf Interactions Made <span className='text-purple-500'>Simple</span></h1>
          <div className='text-neutral-400 mt-5 w-96  h-[100px] bg-white  p-4 border border-dashed rounded-md black  items-center flex justify-center'>
         {!loading && <div {...getRootProps()}>
             <input {...getInputProps()} className='m-4  border  border-neutral-200 bg-red-200' />

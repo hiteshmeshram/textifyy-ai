@@ -12,10 +12,6 @@ export const authOptions: AuthOptions = {
       ],
       secret: process.env.NEXTAUTH_SECRET,
       callbacks: {
-        async jwt({token, user}) {
-           
-          return token
-        },
         async signIn({user}) {
           const existinguser = await prisma.user.findUnique({
             where: {
@@ -23,15 +19,29 @@ export const authOptions: AuthOptions = {
             }
           })
 
-          if (existinguser) return true;
+          if (!existinguser) {
+            const newUser = await prisma.user.create({
+              data: {
+                name: user.name!,
+                email: user.email!
+              }
+            })
+            user.id = newUser.id.toString();  
+          } else {
+            user.id = existinguser.id.toString();
+          }
 
-          await prisma.user.create({
-            data: {
-              name: user.name!,
-              email: user.email!
-            }
-          })
             return true;
-        }
+        },
+
+        async jwt({token, user}) {
+           if (user) {
+            token.id = user.id;
+           }
+          return token
+        },
+        async session({session, token, user}) {
+          return session;
+        }     
       }
 }

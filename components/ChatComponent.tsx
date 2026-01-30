@@ -47,7 +47,7 @@ export const ChatComponent = () => {
         main()
     }, [userMessage])
     return <div className="w-full border border-neutral-200">
-            <div className="flex flex-col  h-3/4 w-full mx-auto   relative">
+            <div className="flex flex-col  h-3/4 w-full mx-auto  relative">
                 <div className=" mt-10 flex-1 w-full min-h-[80%] overflow-y-scroll  flex flex-col gap-5 p-20 ">
                     {messages?.map((m, index) => <div key={index} className="w-full ">
                         {m.role === 'user' && <div className="flex justify-end gap-4 ">

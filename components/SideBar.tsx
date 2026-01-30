@@ -14,8 +14,9 @@ export interface Document {
 
 export const SideBar = () => {
 const [isOpen,setIsOpen]= useState<Boolean>(true);
-const[userDocuments, setUserDocuments] = useState<Document[] | null>(null)
+const [userDocuments, setUserDocuments] = useState<Document[] | null>(null)
 const router = useRouter();
+const [open,setOpen] = useState<Boolean>(false)
 
 async function main() {
     const documents: Document[] = await getAllDocuments();
@@ -42,7 +43,7 @@ const handleSignout = () => {
         </div>
         <div className=" m-4">
             <ul>
-                {!userDocuments && <li>No Recent uploads</li>}
+                { isOpen && !userDocuments && <li>No Recent uploads</li>}
                 {userDocuments?.map((u, index) => <li key={index} onClick={() => router.push(`/chat/${u.id}`)} className="flex w-full cursor-pointer gap-3 bg-blue-100 px-4 py-2 m-2 mb-4 rounded-xl">
                     <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-archive-icon lucide-archive"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg></span>
                     {isOpen && <p className="flex flex-1">{u.name}</p>}
